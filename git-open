@@ -112,6 +112,9 @@ else
   elif grep -q gitlab <<<$giturl; then
     giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
     providerUrlDifference=tree
+  elif grep -q "^ssh:" <<<$giturl; then
+    giturl=`sed -E "s/.*@(.*)(:[^\/]*)\/(.*)\/(.*).git/https:\/\/\1\/projects\/\3\/repos\/\4\/browse/" <<<$giturl`
+    providerUrlDifference="?at=refs/heads"
   fi
 fi
 giturl=${giturl%\.git}
